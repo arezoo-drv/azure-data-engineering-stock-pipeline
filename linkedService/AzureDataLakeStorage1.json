@@ -5,7 +5,7 @@
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
-			"url": "https://lake001.dfs.core.windows.net/"
+			"url": "https://your-storage-account.dfs.core.windows.net/"
 		}
 	}
 }
