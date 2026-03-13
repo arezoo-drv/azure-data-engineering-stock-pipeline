@@ -5,8 +5,8 @@
 		"annotations": [],
 		"type": "AzureSqlDatabase",
 		"typeProperties": {
-			"server": "sql-investment-develop.database.windows.net",
-			"database": "Investment_dw",
+			"server": "your-sql-server.database.windows.net",
+			"database": "your_database_name",
 			"encrypt": "mandatory",
 			"trustServerCertificate": false,
 			"authenticationType": "SystemAssignedManagedIdentity"
