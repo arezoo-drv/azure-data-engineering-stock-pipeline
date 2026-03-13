@@ -1,0 +1,66 @@
+{
+	"name": "AzureSqlFactStock",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "DateKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SymbolKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SourceRecordId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "OpenPrice",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 6
+			},
+			{
+				"name": "HighPrice",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 6
+			},
+			{
+				"name": "LowPrice",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 6
+			},
+			{
+				"name": "ClosePrice",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 6
+			},
+			{
+				"name": "Volume",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "SourceName",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dw",
+			"table": "FactStockCandleDaily"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

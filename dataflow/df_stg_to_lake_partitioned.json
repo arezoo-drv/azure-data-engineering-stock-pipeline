@@ -1,0 +1,66 @@
+{
+	"name": "df_stg_to_lake_partitioned",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "AzureDataLakeStorage1",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          stg_id as long,",
+				"          symbol as string,",
+				"          candle_date as date,",
+				"          open_price as decimal(19,6),",
+				"          high_price as decimal(19,6),",
+				"          low_price as decimal(19,6),",
+				"          close_price as decimal(19,6),",
+				"          volume as long,",
+				"          load_batch_utc as timestamp,",
+				"          source_name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 derive(p_year = toString(year(candle_date)),",
+				"          p_month = lpad(toString(month(candle_date)), 2, '0'),",
+				"          p_day = lpad(toString(dayOfMonth(candle_date)), 2, '0'),",
+				"          partition_path = concat('silver/stock_candle_daily/', 'year=' , toString(year(candle_date)) ,\r",
+				"'/month=' , lpad(toString(month(candle_date)), 2, '0') ,\r",
+				"'/day=' , lpad(toString(dayOfMonth(candle_date)), 2, '0'))) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     fileSystem: 'datalake',",
+				"     folderPath: 'silver/stock_candle_daily',",
+				"     rowFolderUrlColumn:'partition_path',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

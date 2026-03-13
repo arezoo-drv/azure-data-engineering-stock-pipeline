@@ -1,0 +1,105 @@
+{
+	"name": "AzureSqlDimDate",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "DateKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FullDate",
+				"type": "date"
+			},
+			{
+				"name": "Year",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "Quarter",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "QuarterName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "QuarterLabel",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Month",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "MonthName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MonthNameShort",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MonthLabel",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MonthStartDate",
+				"type": "date"
+			},
+			{
+				"name": "MonthEndDate",
+				"type": "date"
+			},
+			{
+				"name": "Day",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "DayOfYear",
+				"type": "smallint",
+				"precision": 5
+			},
+			{
+				"name": "DayOfWeekISO",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "DayName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DayNameShort",
+				"type": "nvarchar"
+			},
+			{
+				"name": "IsWeekend",
+				"type": "bit"
+			},
+			{
+				"name": "IsMonthStart",
+				"type": "bit"
+			},
+			{
+				"name": "IsMonthEnd",
+				"type": "bit"
+			}
+		],
+		"typeProperties": {
+			"schema": "dw",
+			"table": "DimDate"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

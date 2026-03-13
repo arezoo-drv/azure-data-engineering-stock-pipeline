@@ -1,0 +1,9 @@
+{
+	"name": "adf-investment-01",
+	"location": "canadacentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "82b0fc71-e4c9-4397-8bb8-982f4c0f75fd",
+		"tenantId": "9597e7d2-6a62-4487-ae3e-4d18b1fd5e55"
+	}
+}

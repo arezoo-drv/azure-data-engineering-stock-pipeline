@@ -1,0 +1,82 @@
+{
+	"name": "df_silver_to_dimsymbol",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Parquet1",
+						"type": "DatasetReference"
+					},
+					"name": "SrcSilverSymbol"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlDimSymbol",
+						"type": "DatasetReference"
+					},
+					"name": "snkDimSymbol"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selSymbol"
+				},
+				{
+					"name": "fltSymbolNotNull"
+				},
+				{
+					"name": "aggDistinctSymbol"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          raw_id as long,",
+				"          symbol as string,",
+				"          candle_date as date,",
+				"          open_price as decimal(19,6),",
+				"          high_price as decimal(19,6),",
+				"          low_price as decimal(19,6),",
+				"          close_price as decimal(19,6),",
+				"          volume as long,",
+				"          source_name as string,",
+				"          ingested_at_utc as timestamp,",
+				"          api_call_id as long,",
+				"          day as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> SrcSilverSymbol",
+				"SrcSilverSymbol select(mapColumn(",
+				"          symbol",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selSymbol",
+				"selSymbol filter(!isNull(symbol) && trim(symbol) != '') ~> fltSymbolNotNull",
+				"fltSymbolNotNull aggregate(groupBy(symbol),",
+				"     aggDistinctSymbol = first(symbol)) ~> aggDistinctSymbol",
+				"aggDistinctSymbol sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SymbolKey as integer,",
+				"          Symbol as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Symbol = aggDistinctSymbol",
+				"     )) ~> snkDimSymbol"
+			]
+		}
+	}
+}

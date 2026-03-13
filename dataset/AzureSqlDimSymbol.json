@@ -1,0 +1,27 @@
+{
+	"name": "AzureSqlDimSymbol",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "SymbolKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Symbol",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dw",
+			"table": "DimSymbol"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

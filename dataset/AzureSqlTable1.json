@@ -1,0 +1,74 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "raw_id",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "symbol",
+				"type": "nvarchar"
+			},
+			{
+				"name": "candle_date",
+				"type": "date"
+			},
+			{
+				"name": "open_price",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 6
+			},
+			{
+				"name": "high_price",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 6
+			},
+			{
+				"name": "low_price",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 6
+			},
+			{
+				"name": "close_price",
+				"type": "decimal",
+				"precision": 19,
+				"scale": 6
+			},
+			{
+				"name": "volume",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "source_name",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ingested_at_utc",
+				"type": "datetime2",
+				"scale": 0
+			},
+			{
+				"name": "api_call_id",
+				"type": "bigint",
+				"precision": 19
+			}
+		],
+		"typeProperties": {
+			"schema": "stg",
+			"table": "stock_candle_daily"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

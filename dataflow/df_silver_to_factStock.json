@@ -1,0 +1,192 @@
+{
+	"name": "df_silver_to_factStock",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Parquet1",
+						"type": "DatasetReference"
+					},
+					"name": "srcSilverCandle"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlDimSymbol",
+						"type": "DatasetReference"
+					},
+					"name": "srcDimSymbol"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlDimDate",
+						"type": "DatasetReference"
+					},
+					"name": "srcDimdate"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlFactStock",
+						"type": "DatasetReference"
+					},
+					"name": "sinkFactStuck"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selCandle"
+				},
+				{
+					"name": "lkpSymbol"
+				},
+				{
+					"name": "RemoveSymbolName"
+				},
+				{
+					"name": "lkpDate"
+				},
+				{
+					"name": "selFinalFact"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          stg_id as long,",
+				"          symbol as string,",
+				"          candle_date as date,",
+				"          open_price as decimal(19,6),",
+				"          high_price as decimal(19,6),",
+				"          low_price as decimal(19,6),",
+				"          close_price as decimal(19,6),",
+				"          volume as long,",
+				"          load_batch_utc as timestamp,",
+				"          source_name as string,",
+				"          p_year as string,",
+				"          p_month as string,",
+				"          p_day as string,",
+				"          day as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> srcSilverCandle",
+				"source(output(",
+				"          SymbolKey as integer,",
+				"          Symbol as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcDimSymbol",
+				"source(output(",
+				"          DateKey as integer,",
+				"          FullDate as date,",
+				"          Year as integer,",
+				"          Quarter as integer,",
+				"          QuarterName as string,",
+				"          QuarterLabel as string,",
+				"          Month as integer,",
+				"          MonthName as string,",
+				"          MonthNameShort as string,",
+				"          MonthLabel as string,",
+				"          MonthStartDate as date,",
+				"          MonthEndDate as date,",
+				"          Day as integer,",
+				"          DayOfYear as integer,",
+				"          DayOfWeekISO as integer,",
+				"          DayName as string,",
+				"          DayNameShort as string,",
+				"          IsWeekend as boolean,",
+				"          IsMonthStart as boolean,",
+				"          IsMonthEnd as boolean",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcDimdate",
+				"srcSilverCandle select(mapColumn(",
+				"          stg_id,",
+				"          symbol,",
+				"          candle_date,",
+				"          open_price,",
+				"          high_price,",
+				"          low_price,",
+				"          close_price,",
+				"          volume,",
+				"          source_name",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selCandle",
+				"selCandle, srcDimSymbol lookup(selCandle@symbol == srcDimSymbol@Symbol,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lkpSymbol",
+				"lkpSymbol select(mapColumn(",
+				"          stg_id,",
+				"          SymbolKey,",
+				"          candle_date,",
+				"          open_price,",
+				"          high_price,",
+				"          low_price,",
+				"          close_price,",
+				"          volume,",
+				"          source_name",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RemoveSymbolName",
+				"RemoveSymbolName, srcDimdate lookup(candle_date == FullDate,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lkpDate",
+				"lkpDate select(mapColumn(",
+				"          DateKey,",
+				"          SymbolKey,",
+				"          stg_id,",
+				"          open_price,",
+				"          high_price,",
+				"          low_price,",
+				"          close_price,",
+				"          volume,",
+				"          source_name",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selFinalFact",
+				"selFinalFact sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          DateKey as integer,",
+				"          SymbolKey as integer,",
+				"          SourceRecordId as integer,",
+				"          OpenPrice as decimal(19,6),",
+				"          HighPrice as decimal(19,6),",
+				"          LowPrice as decimal(19,6),",
+				"          ClosePrice as decimal(19,6),",
+				"          Volume as long,",
+				"          SourceName as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          DateKey,",
+				"          SymbolKey,",
+				"          SourceRecordId = stg_id,",
+				"          OpenPrice = open_price,",
+				"          HighPrice = high_price,",
+				"          LowPrice = low_price,",
+				"          ClosePrice = close_price,",
+				"          Volume = volume,",
+				"          SourceName = source_name",
+				"     )) ~> sinkFactStuck"
+			]
+		}
+	}
+}
