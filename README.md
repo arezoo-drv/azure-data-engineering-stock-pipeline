@@ -1,1 +1,1 @@
-# azure-data-engineering-stock-pipeline
+# Azure Data Engineering Stock Pipeline
