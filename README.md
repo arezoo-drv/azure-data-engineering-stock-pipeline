@@ -76,11 +76,13 @@ Piplines
 Data Flows
 
 	pl_stg_to_lake_stock
-![Architecture Diagram](docs/silver to dim.png)	
+![Architecture Diagram](https://github.com/arezoo-drv/azure-data-engineering-stock-pipeline/blob/a2095a83131f5efaa33448d1091fdcda43788e71/docs/silver%20to%20dim.png))	
 	
 	pl_initial_dimsymbol
-	
+![Architecture Diagram](https://github.com/arezoo-drv/azure-data-engineering-stock-pipeline/blob/a2095a83131f5efaa33448d1091fdcda43788e71/docs/silver%20to%20dim.png))	
+
 	pl_initial_factstock
+![Architecture Diagram](https://github.com/arezoo-drv/azure-data-engineering-stock-pipeline/blob/a2095a83131f5efaa33448d1091fdcda43788e71/docs/silver%20to%20dim.png))
 
 Datasets
 
