@@ -1,0 +1,18 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    
+    
+    "DB_SERVER": "yourServer.database.windows.net",
+    "DB_NAME": "yourDB",
+    "DB_USER": "youruser",
+    "DB_PASSWORD": "yourpass",
+
+    "TWELVEDATA_API_KEY": "******",
+
+    "SYMBOLS": "AAPL,RY,TD,SU",
+    "SOURCE_NAME": "twelvedata"
+  }
+}
