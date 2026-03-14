@@ -10,7 +10,6 @@ The solution is implemented using Azure Data Factory, Azure SQL Database, and Az
 # Project Architecture
 ![Architecture Diagram](docs/diagram.png)
 
-
 # Technologies Used
 | Technology           | Purpose                                 |
 | -------------------- | --------------------------------------- |
@@ -77,6 +76,7 @@ Piplines
 Data Flows
 
 	pl_stg_to_lake_stock
+![Architecture Diagram](docs/silver to dim.png)	
 	
 	pl_initial_dimsymbol
 	
